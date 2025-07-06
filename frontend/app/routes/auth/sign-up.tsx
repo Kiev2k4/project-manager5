@@ -22,7 +22,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 // import Link from "next/link";
 
-type SignUpFormData = z.infer<typeof signUpSchema>;
+export type SignUpFormData = z.infer<typeof signUpSchema>;
 function SignUp() {
   const form = useForm<SignUpFormData>({
     resolver: zodResolver(signUpSchema),
