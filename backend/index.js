@@ -7,6 +7,20 @@ import morgan from "morgan";
 dotenv.config();
 
 const app = express();
+
+app.use(cors({
+    origin:process.env.FRONTEND_URL,
+    methods: ["GET", "POST", "DELETE", "PUT"],
+    allowedHeaders: ['Content-Type', "Authorization"],
+}));
+app.use(morgan("dev"));
+
+//db connection
+mongoose
+    .connect(process.env.MONGODB_URL)
+    .then((()=> console.log("BD connected successfully"))).catch((err) => console.log("Failed to connect to DB: ", err));
+
+
 app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
