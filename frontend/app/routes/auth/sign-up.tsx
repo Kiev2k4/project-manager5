@@ -1,8 +1,8 @@
+import { signInSchema, signUpSchema } from "@/lib/schema";
 import React from "react";
-import { signUpSchema } from "@/lib/schema";
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import {
   Card,
   CardContent,
@@ -14,60 +14,76 @@ import {
 import {
   Form,
   FormControl,
+  FormField,
   FormItem,
   FormLabel,
-  FormField,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-// import Link from "next/link";
+import { Link, useNavigate } from "react-router";
+import { useSignUpMutation } from "@/hooks/use-auth";
+import { toast } from "sonner";
 
-export type SignUpFormData = z.infer<typeof signUpSchema>;
-function SignUp() {
-  const form = useForm<SignUpFormData>({
+export type SignupFormData = z.infer<typeof signUpSchema>;
+
+const SignUp = () => {
+  const navigate = useNavigate();
+  const form = useForm<SignupFormData>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
-      name: "",
       email: "",
       password: "",
+      name: "",
       confirmPassword: "",
     },
   });
-  const handleOnSubmit = (values: SignUpFormData) => {
-    console.log(values);
+
+  const { mutate, isPending } = useSignUpMutation();
+
+  const handleOnSubmit = (values: SignupFormData) => {
+    mutate(values, {
+      onSuccess: () => {
+        toast.success("Email Verification Required", {
+          description:
+            "Please check your email for a verification link. If you don't see it, please check your spam folder.",
+        });
+
+        form.reset();
+        navigate("/sign-in");
+      },
+      onError: (error: any) => {
+        const errorMessage =
+          error.response?.data?.message || "An error occurred";
+        console.log(error);
+        toast.error(errorMessage);
+      },
+    });
   };
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-muted/40 p-4">
       <Card className="max-w-md w-full shadow-xl">
-        <CardHeader>
-          <CardTitle className="text-center text-2xl font-bold">
-            Tạo một tài khoản
+        <CardHeader className="text-center mb-5">
+          <CardTitle className="text-2xl font-bold">
+            Create an account
           </CardTitle>
-          <CardDescription className="text-sm text-muted-foreground text-center ">
-            Vui lòng nhập thông tin đăng ký của bạn
+          <CardDescription className="text-sm text-muted-foreground">
+            Create an account to continue
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleOnSubmit)}>
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Họ và Tên</FormLabel>
-                    <FormControl>
-                      <Input type="text" placeholder="Họ và Tên" {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              ></FormField>
+            <form
+              onSubmit={form.handleSubmit(handleOnSubmit)}
+              className="space-y-6"
+            >
               <FormField
                 control={form.control}
                 name="email"
                 render={({ field }) => (
-                  <FormItem className="mt-4">
-                    <FormLabel>Địa chỉ Email</FormLabel>
+                  <FormItem>
+                    <FormLabel>Email Address</FormLabel>
                     <FormControl>
                       <Input
                         type="email"
@@ -75,64 +91,76 @@ function SignUp() {
                         {...field}
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
-              ></FormField>
+              />
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Full Name</FormLabel>
+                    <FormControl>
+                      <Input type="text" placeholder="John Doe" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <FormField
                 control={form.control}
                 name="password"
                 render={({ field }) => (
-                  <FormItem className="mt-4">
-                    <FormLabel>Mật Khẩu</FormLabel>
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
                     <FormControl>
                       <Input
                         type="password"
-                        placeholder="*********"
+                        placeholder="********"
                         {...field}
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
-              ></FormField>
+              />
               <FormField
                 control={form.control}
                 name="confirmPassword"
                 render={({ field }) => (
-                  <FormItem className="mt-4">
-                    <FormLabel>Xác nhận mật khẩu</FormLabel>
+                  <FormItem>
+                    <FormLabel>Confirm Password</FormLabel>
                     <FormControl>
                       <Input
                         type="password"
-                        placeholder="Nhập lại mật khẩu"
+                        placeholder="********"
                         {...field}
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
-              ></FormField>
-              <Button
-                type="submit"
-                className="w-full mt-6 bg-blue-500 active:bg-black active:text-white transition-colors"
-              >
-                Đăng Ký
+              />
+
+              <Button type="submit" className="w-full" disabled={isPending}>
+                {isPending ? "Signing up..." : "Sign up"}
               </Button>
             </form>
           </Form>
+
+          <CardFooter className="flex items-center justify-center mt-6">
+            <div className="flex items-center justify-center">
+              <p className="text-sm text-muted-foreground">
+                Already have an account? <Link to="/sign-in">Sign in</Link>
+              </p>
+            </div>
+          </CardFooter>
         </CardContent>
-        <CardFooter className="flex items-center justify-center">
-          <div className="flex items-center justify-center ">
-            <p className="text-sm text-muted-foreground">
-              Bạn đã có tài khoản?
-              <a href="/sign-in" className="text-blue-500">
-                Đăng nhập
-              </a>
-            </p>
-          </div>
-        </CardFooter>
       </Card>
     </div>
   );
-}
-
+};
 
 export default SignUp;

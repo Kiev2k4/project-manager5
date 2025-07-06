@@ -1,10 +1,7 @@
 import axios from "axios";
-import { error } from "console";
 import { unknown } from "zod";
 
-
-
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api-v1";
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api-v1";
 
 const api = axios.create({
     baseURL: BASE_URL,
@@ -16,11 +13,12 @@ const api = axios.create({
 api.interceptors.request.use((config) => {
     const token = localStorage.getItem("token");
     if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+        config.headers.Authorization = `Bearer ${token ?? ""}`;
     };
     return config;
 });
 
+//Add a global handler for 401 errors
 api.interceptors.response.use(
     (response) => response, 
     (error) => {
@@ -31,23 +29,23 @@ api.interceptors.response.use(
     }
 );
 
-const postData = async <T>(path: string, data: unknown): Promise<T> => {
-    const response = await api.post(path, data);
+const postData = async <T>(url: string, data: unknown): Promise<T> => {
+    const response = await api.post(url, data);
     return response.data;
 };
 
-const fetchData = async <T>(path: string): Promise<T> => {
-    const response = await api.get(path);
+const fetchData = async <T>(url: string): Promise<T> => {
+    const response = await api.get(url);
     return response.data;
 };
 
-const updateData = async <T>(path: string, data: unknown): Promise<T> => {
-    const response = await api.put(path, data);
+const updateData = async <T>(url: string, data: unknown): Promise<T> => {
+    const response = await api.put(url, data);
     return response.data;
 };
 
-const deleteData = async <T>(path: string): Promise<T> => {
-    const response = await api.delete(path);
+const deleteData = async <T>(url: string): Promise<T> => {
+    const response = await api.delete(url);
     return response.data;
 };
 
