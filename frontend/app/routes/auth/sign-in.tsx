@@ -20,12 +20,20 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useLoginMutation } from "@/hooks/use-auth";
+import { toast } from "sonner";
+import { useNavigate } from "react-router";
+import { Loader2 } from "lucide-react";
+import { useAuth } from "@/provider/auth-context";
 // import Link from "next/link";
 
 
 
 type SignInFormData = z.infer<typeof signInSchema>;
 function SignIn() {
+  const navigate = useNavigate();
+  const {login} = useAuth();
+
   const form = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -33,9 +41,25 @@ function SignIn() {
       password: "",
     },
   });
+  const {mutate, isPending} = useLoginMutation();
+
   const handleOnSubmit = (values: SignInFormData) => {
-    console.log(values);
+    mutate(values, {
+      onSuccess: (data) => {
+        login(data);
+        console.log(data);
+        toast.success("Login successful");
+        navigate("/dashboard");
+      },
+      onError: (error: any) => {
+        const errorMessage = 
+          error.response?.data?.message || "An error occurred";
+        console.log(error);
+        toast.error(errorMessage);
+      },
+    });
   };
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-muted/40 p-4">
       <Card className="max-w-md w-full shadow-xl">
@@ -87,12 +111,11 @@ function SignIn() {
                   </FormItem>
                 )}
               ></FormField>
-              <Button
-                type="submit"
-                className="w-full mt-6 bg-blue-500 active:text-white transition-colors"
-              >
-                Đăng Nhập
+              
+              <Button type="submit" className="w-full mt-6 bg-blue-500 active:text-white transition-colors" disabled={isPending}>
+                {isPending ? <Loader2 className="w-4 h-4 mr-2"/> : "Đăng Nhập"}
               </Button>
+
             </form>
           </Form>
           <CardFooter className="flex items-center justify-center">
