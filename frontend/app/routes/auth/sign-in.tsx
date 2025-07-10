@@ -1,8 +1,4 @@
-import React from "react";
-import { signInSchema } from "@/lib/schema";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -14,18 +10,28 @@ import {
 import {
   Form,
   FormControl,
+  FormField,
   FormItem,
   FormLabel,
-  FormField,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-// import Link from "next/link";
+import { useLoginMutation } from "@/hooks/use-auth";
+import { signInSchema } from "@/lib/schema";
+import { useAuth } from "@/provider/auth-context";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router";
+import { toast } from "sonner";
+import { z } from "zod";
 
 
 
 type SignInFormData = z.infer<typeof signInSchema>;
 function SignIn() {
+  const navigate = useNavigate();
+  const { login } = useAuth();
   const form = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -33,8 +39,22 @@ function SignIn() {
       password: "",
     },
   });
+  const { mutate, isPending } = useLoginMutation();
   const handleOnSubmit = (values: SignInFormData) => {
-    console.log(values);
+    mutate(values, {
+      onSuccess: (data) => {
+        login(data);
+        console.log(data);
+        toast.success("Login successful");
+        navigate("/dashboard");
+      },
+      onError: (error: any) => {
+        const errorMessage =
+          error.response?.data?.message || "An error occurred";
+        console.log(error);
+        toast.error(errorMessage);
+      },
+    });
   };
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-muted/40 p-4">
@@ -90,8 +110,9 @@ function SignIn() {
               <Button
                 type="submit"
                 className="w-full mt-6 bg-blue-500 active:text-white transition-colors"
+                disabled={isPending}
               >
-                Đăng Nhập
+                {isPending ? <Loader2 className="w-4 h-4 mr-2" /> : "Sign in"}
               </Button>
             </form>
           </Form>
