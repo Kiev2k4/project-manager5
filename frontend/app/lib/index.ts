@@ -1,1 +1,1 @@
-export const publicRoutes = ["/sign-in","sign-up", "/verify-email","forgot-password", "/reset-password","/"];
+export const publicRoutes = ["/sign-in", "/sign-up", "/verify-email", "/reset-password", "/forgot-password", "/"];

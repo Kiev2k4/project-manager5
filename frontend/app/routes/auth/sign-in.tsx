@@ -16,22 +16,18 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useLoginMutation } from "@/hooks/use-auth";
-import { signInSchema } from "@/lib/schema";
-import { useAuth } from "@/provider/auth-context";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router";
-import { toast } from "sonner";
 import { z } from "zod";
+import { signInSchema } from "@/lib/schema";
+
+// import Link from "next/link";
+
 
 
 
 type SignInFormData = z.infer<typeof signInSchema>;
 function SignIn() {
-  const navigate = useNavigate();
-  const { login } = useAuth();
   const form = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -39,23 +35,10 @@ function SignIn() {
       password: "",
     },
   });
-  const { mutate, isPending } = useLoginMutation();
   const handleOnSubmit = (values: SignInFormData) => {
-    mutate(values, {
-      onSuccess: (data) => {
-        login(data);
-        console.log(data);
-        toast.success("Login successful");
-        navigate("/dashboard");
-      },
-      onError: (error: any) => {
-        const errorMessage =
-          error.response?.data?.message || "An error occurred";
-        console.log(error);
-        toast.error(errorMessage);
-      },
-    });
+    console.log(values);
   };
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-muted/40 p-4">
       <Card className="max-w-md w-full shadow-xl">
@@ -110,10 +93,10 @@ function SignIn() {
               <Button
                 type="submit"
                 className="w-full mt-6 bg-blue-500 active:text-white transition-colors"
-                disabled={isPending}
               >
-                {isPending ? <Loader2 className="w-4 h-4 mr-2" /> : "Sign in"}
+                Đăng Nhập
               </Button>
+
             </form>
           </Form>
           <CardFooter className="flex items-center justify-center">
