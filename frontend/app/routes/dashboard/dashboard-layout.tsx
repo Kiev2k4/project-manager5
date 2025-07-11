@@ -5,9 +5,9 @@ const DashboardLayout = () => {
   const { user, logout } = useAuth();
   return (
     <div>
-      <Button onClick={logout}>Logout</Button>
+      <Button onClick={logout}>Logout 1</Button>
     </div>
   );
 };
 
-export default DashboardLayout
+export default DashboardLayout;
