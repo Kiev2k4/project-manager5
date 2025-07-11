@@ -22,6 +22,7 @@ router.post(
     loginUser
 );
 
+
 router.post(
     "/verify-email", 
     validateRequest({
@@ -47,4 +48,3 @@ router.post(
 );
 
 export default router;
-
