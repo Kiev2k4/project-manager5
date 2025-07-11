@@ -89,8 +89,7 @@ const loginUser = async (req, res) => {
 
             if (existingVerification && existingVerification.expiresAt > new Date()) {
                 return res.status(400).json({
-                    message: 
-                        "Email not verified. Please check your email for the verification link.",
+                    message: "Email not verified. Please check your email for the verification link.",
                 });
             } else {
                 await Verification.findByIdAndDelete({_id: existingVerification._id}); 
