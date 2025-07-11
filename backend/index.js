@@ -30,7 +30,7 @@ const PORT = process.env.PORT || 5000;
 
 app.get("/", async (req, res) => {
     res.status(200).json({
-        message: "Welcome to TaskHub API",
+        message: "Welcome to ProjectManager API",
     });
 });
 
