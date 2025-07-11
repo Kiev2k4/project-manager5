@@ -5,7 +5,7 @@ const DashboardLayout = () => {
   const { user, logout } = useAuth();
   return (
     <div>
-      <Button onClick={logout}>Logout 1</Button>
+      <Button onClick={logout}>Logout</Button>
     </div>
   );
 };
