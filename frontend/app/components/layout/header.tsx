@@ -1,4 +1,3 @@
-//header.tsx
 import { useAuth } from "@/provider/auth-context";
 import type { Workspace } from "@/types";
 import { Button } from "../ui/button";
@@ -30,8 +29,7 @@ export const Header = ({
   const navigate = useNavigate();
 
   const { user, logout } = useAuth();
-  // const { workspaces } = useLoaderData() as { workspaces: Workspace[] };
-  const workspaces: any = [];
+  const { workspaces } = useLoaderData() as { workspaces: Workspace[] | [] };
   const isOnWorkspacePage = useLocation().pathname.includes("/workspace");
 
   const handleOnClick = (workspace: Workspace) => {
@@ -72,19 +70,19 @@ export const Header = ({
           <DropdownMenuContent>
             <DropdownMenuLabel>Workspace</DropdownMenuLabel>
             <DropdownMenuSeparator />
-
             <DropdownMenuGroup>
-              {workspaces.map((ws) => (
-                <DropdownMenuItem
-                  key={ws._id}
-                  onClick={() => handleOnClick(ws)}
-                >
-                  {ws.color && (
-                    <WorkspaceAvatar color={ws.color} name={ws.name} />
-                  )}
-                  <span className="ml-2">{ws.name}</span>
-                </DropdownMenuItem>
-              ))}
+              {workspaces != undefined &&
+                workspaces.map((ws) => (
+                  <DropdownMenuItem
+                    key={ws._id}
+                    onClick={() => onWorkspaceSelected(ws)}
+                  >
+                    {ws.color && (
+                      <WorkspaceAvatar color={ws.color} name={ws.name} />
+                    )}
+                    <span className="ml-2">{ws.name}</span>
+                  </DropdownMenuItem>
+                ))}
             </DropdownMenuGroup>
 
             <DropdownMenuGroup>

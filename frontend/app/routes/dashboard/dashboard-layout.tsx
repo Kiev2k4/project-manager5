@@ -1,7 +1,7 @@
 import { Header } from "@/components/layout/header";
 import { SidebarComponent } from "@/components/layout/sidebar-component";
-// import { Loader } from "@/components/loader";
-// import { CreateWorkspace } from "@/components/workspace/create-workspace";
+import { Loader } from "@/components/loader";
+import { CreateWorkspace } from "@/components/workspace/create-workspace";
 import { fetchData } from "@/lib/fetch-util";
 import { useAuth } from "@/provider/auth-context";
 import type { Workspace } from "@/types";
@@ -11,7 +11,7 @@ import { Navigate, Outlet } from "react-router";
 export const clientLoader = async () => {
   try {
     const [workspaces] = await Promise.all([fetchData("/workspaces")]);
-    return { workspaces };
+    return { workspaces: [] };
   } catch (error) {
     console.log(error);
   }
@@ -23,16 +23,28 @@ const DashboardLayout = () => {
     null
   );
 
+  console.log(
+    "[DashboardLayout] Render: isLoading=",
+    isLoading,
+    "isAuthenticated=",
+    isAuthenticated,
+    "currentWorkspace=",
+    currentWorkspace
+  );
+
   if (isLoading) {
-    return null;
+    console.log("[DashboardLayout] Loading...");
+    return <Loader />;
   }
 
-  if (!isAuthenticated) {
+  if (!isLoading && !isAuthenticated) {
+    console.log("[DashboardLayout] Not authenticated, redirecting to /sign-in");
     return <Navigate to="/sign-in" />;
   }
 
   const handleWorkspaceSelected = (workspace: Workspace) => {
     setCurrentWorkspace(workspace);
+    console.log("[DashboardLayout] Workspace selected:", workspace);
   };
 
   return (
@@ -53,10 +65,10 @@ const DashboardLayout = () => {
         </main>
       </div>
 
-      {/* <CreateWorkspace
+      <CreateWorkspace
         isCreatingWorkspace={isCreatingWorkspace}
         setIsCreatingWorkspace={setIsCreatingWorkspace}
-      /> */}
+      />
     </div>
   );
 };
