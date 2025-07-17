@@ -1,5 +1,5 @@
 import Workspace from "../models/workspace.js";
-// import Project from "../models/project.js";
+import Project from "../models/project.js";
 import User from "../models/user.js";
 // import WorkspaceInvite from "../models/workspace-invite.js";
 import jwt from "jsonwebtoken";
