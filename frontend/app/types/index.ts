@@ -1,11 +1,11 @@
 export interface User {
-    _id: string;
-    email: string;
-    name: string;
-    createdAt: Date;
-    isEmailVerified: boolean;
-    updatedAt: Date;
-    profilePicture?: string;
+  _id: string;
+  email: string;
+  name: string;
+  createdAt: Date;
+  isEmailVerified: boolean;
+  updatedAt: Date;
+  profilePicture?: string;
 }
 
 export interface Workspace {

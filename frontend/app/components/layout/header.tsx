@@ -1,19 +1,10 @@
-//header.tsx
 import { useAuth } from "@/provider/auth-context";
 import type { Workspace } from "@/types";
 import { Button } from "../ui/button";
 import { Bell, PlusCircle } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuItem,
-  DropdownMenuGroup,
-} from "../ui/dropdown-menu";
-import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
-import { Link, useLoaderData, useLocation, useNavigate } from "react-router";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Link } from "react-router";
 import { WorkspaceAvatar } from "../workspace/workspace-avatar";
 
 interface HeaderProps {
@@ -27,25 +18,8 @@ export const Header = ({
   selectedWorkspace,
   onCreateWorkspace,
 }: HeaderProps) => {
-  const navigate = useNavigate();
-
   const { user, logout } = useAuth();
-  // const { workspaces } = useLoaderData() as { workspaces: Workspace[] };
-  const workspaces: any = [];
-  const isOnWorkspacePage = useLocation().pathname.includes("/workspace");
-
-  const handleOnClick = (workspace: Workspace) => {
-    onWorkspaceSelected(workspace);
-    const location = window.location;
-
-    if (isOnWorkspacePage) {
-      navigate(`/workspaces/${workspace._id}`);
-    } else {
-      const basePath = location.pathname;
-
-      navigate(`${basePath}?workspaceId=${workspace._id}`);
-    }
-  };
+  const workspaces = [];
 
   return (
     <div className="bg-background sticky top-0 z-40 border-b">
@@ -77,7 +51,7 @@ export const Header = ({
               {workspaces.map((ws) => (
                 <DropdownMenuItem
                   key={ws._id}
-                  onClick={() => handleOnClick(ws)}
+                  onClick={() => onWorkspaceSelected(ws)}
                 >
                   {ws.color && (
                     <WorkspaceAvatar color={ws.color} name={ws.name} />
@@ -95,7 +69,7 @@ export const Header = ({
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
-
+        
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon">
             <Bell />

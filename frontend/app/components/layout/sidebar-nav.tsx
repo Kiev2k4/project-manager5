@@ -1,4 +1,3 @@
-// sidebar-nav.tsx
 import { cn } from "@/lib/utils";
 import type { Workspace } from "@/types";
 import type { LucideIcon } from "lucide-react";
@@ -15,6 +14,7 @@ interface SidebarNavProps extends React.HtmlHTMLAttributes<HTMLElement> {
   currentWorkspace: Workspace | null;
   className?: string;
 }
+
 export const SidebarNav = ({
   items,
   isCollapsed,
@@ -22,8 +22,8 @@ export const SidebarNav = ({
   currentWorkspace,
   ...props
 }: SidebarNavProps) => {
-  const location = useLocation();
-  const navigate = useNavigate();
+    const location = useLocation();
+    const navigate = useNavigate();
 
   return (
     <nav className={cn("flex flex-col gap-y-2", className)} {...props}>
