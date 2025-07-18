@@ -1,6 +1,6 @@
-// import { recordActivity } from "../libs/index.js";
-// import ActivityLog from "../models/activity.js";
-// import Comment from "../models/comment.js";
+import { recordActivity } from "../libs/index.js";
+import ActivityLog from "../models/activity.js";
+import Comment from "../models/comment.js";
 import Project from "../models/project.js";
 import Task from "../models/task.js";
 import Workspace from "../models/workspace.js";
@@ -137,6 +137,7 @@ const updateTaskTitle = async (req, res) => {
     });
   }
 };
+
 const updateTaskDescription = async (req, res) => {
   try {
     const { taskId } = req.params;
@@ -171,6 +172,7 @@ const updateTaskDescription = async (req, res) => {
     const oldDescription =
       task.description.substring(0, 50) +
       (task.description.length > 50 ? "..." : "");
+
     const newDescription =
       description.substring(0, 50) + (description.length > 50 ? "..." : "");
 
@@ -240,6 +242,7 @@ const updateTaskStatus = async (req, res) => {
     });
   }
 };
+
 const updateTaskAssignees = async (req, res) => {
   try {
     const { taskId } = req.params;
@@ -289,6 +292,7 @@ const updateTaskAssignees = async (req, res) => {
     });
   }
 };
+
 const updateTaskPriority = async (req, res) => {
   try {
     const { taskId } = req.params;
@@ -581,7 +585,7 @@ const watchTask = async (req, res) => {
   }
 };
 
-const achievedTask = async (req, res) => {
+const archivedTask = async (req, res) => {
   try {
     const { taskId } = req.params;
 
@@ -610,14 +614,14 @@ const achievedTask = async (req, res) => {
         message: "You are not a member of this project",
       });
     }
-    const isAchieved = task.isArchived;
+    const isArchived = task.isArchived;
 
-    task.isArchived = !isAchieved;
+    task.isArchived = !isArchived;
     await task.save();
 
     // record activity
     await recordActivity(req.user._id, "updated_task", "Task", taskId, {
-      description: `${isAchieved ? "unachieved" : "achieved"} task ${
+      description: `${isArchived ? "unarchived" : "archived"} task ${
         task.title
       }`,
     });
@@ -661,6 +665,6 @@ export {
   getCommentsByTaskId,
   addComment,
   watchTask,
-  achievedTask,
+  archivedTask,
   getMyTasks,
 };
