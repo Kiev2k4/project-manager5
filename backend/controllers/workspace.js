@@ -1,10 +1,10 @@
 import Workspace from "../models/workspace.js";
 import Project from "../models/project.js";
 import User from "../models/user.js";
-// import WorkspaceInvite from "../models/workspace-invite.js";
+import WorkspaceInvite from "../models/workspace-invite.js";
 import jwt from "jsonwebtoken";
 import { sendEmail } from "../libs/send-email.js";
-// import { recordActivity } from "../libs/index.js";
+import { recordActivity } from "../libs/index.js";
 
 const createWorkspace = async (req, res) => {
   try {
