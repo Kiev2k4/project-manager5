@@ -288,5 +288,5 @@ project-manager/
 
 ## Author
 
-**Your Name**
-[LinkedIn](https://linkedin.com/in/your-profile) · [GitHub](https://github.com/your-username) · [Portfolio](https://yourwebsite.com)
+**Hau Nguyen**
+[LinkedIn](https://www.linkedin.com/in/hau-nguyen-521233254/) · [GitHub](https://github.com/Kiev2k4)
