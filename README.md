@@ -6,7 +6,7 @@ A full-stack project management web application built with a modern React + Node
 
 ## Live Demo
 
-> project-manager5.vercel.app
+project-manager5.vercel.app
 
 ---
 
