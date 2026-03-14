@@ -289,4 +289,6 @@ project-manager/
 ## Author
 
 **Hau Nguyen**
-[LinkedIn](https://www.linkedin.com/in/hau-nguyen-521233254/) · [GitHub](https://github.com/Kiev2k4)
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/hau-nguyen-521233254/)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)](https://github.com/Kiev2k4)
